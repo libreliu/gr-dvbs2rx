@@ -21,8 +21,8 @@ endif()
 
 # Install to Conda target prefix if defined
 if(DEFINED ENV{CONDA_PREFIX})
-    set(CMAKE_INSTALL_PREFIX $ENV{CONDA_PREFIX})
-    message(STATUS "Conda installed GNU Radio. Setting CMAKE_INSTALL_PREFIX to $ENV{CONDA_PREFIX}")
+    set(CMAKE_INSTALL_PREFIX "D:/radioconda/Library")
+    message(STATUS "Conda installed GNU Radio. Setting CMAKE_INSTALL_PREFIX to ${CMAKE_INSTALL_PREFIX}")
 endif()
 
 # Select the release build type by default to get optimization flags

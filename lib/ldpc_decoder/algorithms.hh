@@ -170,7 +170,9 @@ struct OffsetMinSumAlgorithm<SIMD<int8_t, WIDTH>, UPDATE, FACTOR> {
     static void finalp(TYPE* links, int cnt)
     {
         auto beta = vunsigned(vdup<TYPE>(std::nearbyint(0.5 * FACTOR)));
-        TYPE mags[cnt];
+        //TYPE mags[cnt];
+        TYPE *mags;
+        mags = (TYPE *)malloc(sizeof(TYPE) * cnt);
         for (int i = 0; i < cnt; ++i)
             mags[i] = vsigned(vqsub(vunsigned(vqabs(links[i])), beta));
 
@@ -189,6 +191,8 @@ struct OffsetMinSumAlgorithm<SIMD<int8_t, WIDTH>, UPDATE, FACTOR> {
         for (int i = 0; i < cnt; ++i)
             links[i] = sign(other(mags[i], mins[0], mins[1]),
                             orr(eor(signs, links[i]), vdup<TYPE>(127)));
+        
+        free(mags);
     }
     static TYPE add(TYPE a, TYPE b) { return vqadd(a, b); }
     static TYPE sub(TYPE a, TYPE b) { return vqsub(a, b); }

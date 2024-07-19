@@ -54,7 +54,10 @@ class LDPCDecoder
             int cnt = cnc[i];
             for (int j = 0; j < M; ++j) {
                 int deg = cnt + 2 - !(i | j);
-                TYPE inp[deg], out[deg];
+                //TYPE inp[deg], out[deg];
+                TYPE *inp, *out;
+                inp = (TYPE *)malloc(sizeof(TYPE) * deg);
+                out = (TYPE *)malloc(sizeof(TYPE) * deg);
                 for (int c = 0; c < cnt; ++c)
                     inp[c] = out[c] = alg.sub(data[pos[CNL * (M * i + j) + c]], bl[c]);
                 inp[cnt] = out[cnt] = alg.sub(parity[M * i + j], bl[cnt]);
@@ -74,6 +77,9 @@ class LDPCDecoder
                     parity[j + (q - 1) * M - 1] = alg.add(inp[cnt + 1], out[cnt + 1]);
                 for (int d = 0; d < deg; ++d)
                     alg.update(bl++, out[d]);
+
+                free(inp);
+                free(out);
             }
         }
     }
@@ -101,8 +107,8 @@ public:
     void init(LDPCInterface* it)
     {
         if (initialized) {
-            free(bnl);
-            free(pty);
+            LDPC_ALIGNED_FREE(bnl);
+            LDPC_ALIGNED_FREE(pty);
             delete[] cnc;
             delete[] pos;
         }
@@ -130,8 +136,8 @@ public:
         }
         LT = ldpc->links_total();
         delete ldpc;
-        bnl = reinterpret_cast<TYPE*>(aligned_alloc(sizeof(TYPE), sizeof(TYPE) * LT));
-        pty = reinterpret_cast<TYPE*>(aligned_alloc(sizeof(TYPE), sizeof(TYPE) * R));
+        bnl = reinterpret_cast<TYPE*>(LDPC_ALIGNED_ALLOC(sizeof(TYPE), sizeof(TYPE) * LT));
+        pty = reinterpret_cast<TYPE*>(LDPC_ALIGNED_ALLOC(sizeof(TYPE), sizeof(TYPE) * R));
         uint16_t* tmp = new uint16_t[R * CNL];
         for (int i = 0; i < q; ++i)
             for (int j = 0; j < M; ++j)
@@ -161,8 +167,8 @@ public:
     ~LDPCDecoder()
     {
         if (initialized) {
-            free(bnl);
-            free(pty);
+            LDPC_ALIGNED_FREE(bnl);
+            LDPC_ALIGNED_FREE(pty);
             delete[] cnc;
             delete[] pos;
         }

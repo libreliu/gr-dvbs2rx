@@ -108,7 +108,8 @@ int xfecframe_demapper_cb_impl::general_work(int noutput_items,
     auto out = static_cast<int8_t*>(output_items[0]);
     const int n_mod = d_mod->bits();
     const int n_frames = noutput_items / d_fecframe_len;
-    int8_t tmp[n_mod];
+    //int8_t tmp[n_mod];
+    int8_t *tmp = (int8_t *)malloc(sizeof(int8_t) * n_mod);
     int consumed = 0;
     static constexpr float Es = 1.0; // assume unitary symbol energy
 
@@ -182,6 +183,7 @@ int xfecframe_demapper_cb_impl::general_work(int noutput_items,
     }
 
     consume_each(consumed);
+    free(tmp);
     return noutput_items;
 }
 

@@ -123,7 +123,7 @@ public:
     void init(LDPCInterface* it)
     {
         if (initialized) {
-            free(aligned_buffer);
+            LDPC_ALIGNED_FREE(aligned_buffer);
             delete[] cnc;
             delete ldpc;
         }
@@ -135,7 +135,7 @@ public:
         CNL = ldpc->links_max_cn();
         LT = ldpc->links_total();
         int num = LT + N + R * CNL + R;
-        aligned_buffer = aligned_alloc(sizeof(TYPE), sizeof(TYPE) * num);
+        aligned_buffer = LDPC_ALIGNED_ALLOC(sizeof(TYPE), sizeof(TYPE) * num);
         TYPE* ptr = reinterpret_cast<TYPE*>(aligned_buffer);
         bnl = ptr;
         ptr += LT;
@@ -166,7 +166,7 @@ public:
     ~LDPCDecoder()
     {
         if (initialized) {
-            free(aligned_buffer);
+            LDPC_ALIGNED_FREE(aligned_buffer);
             delete[] cnc;
             delete ldpc;
         }

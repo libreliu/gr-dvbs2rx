@@ -350,7 +350,7 @@ ldpc_decoder_bb_impl::ldpc_decoder_bb_impl(dvb_standard_t standard,
     assert(decode != nullptr);
     d_debug_logger->debug("LDPC decoder implementation: {:s}", impl);
     d_soft = new int8_t[d_ldpc->code_len() * d_simd_size];
-    d_aligned_buffer = aligned_alloc(d_simd_size, d_simd_size * d_ldpc->code_len());
+    d_aligned_buffer = LDPC_ALIGNED_ALLOC(d_simd_size, d_simd_size * d_ldpc->code_len());
     if (outputmode == OM_MESSAGE) {
         set_output_multiple(d_kldpc_bytes * d_simd_size);
         set_relative_rate((double)d_kldpc_bytes / d_nldpc);
@@ -372,7 +372,7 @@ ldpc_decoder_bb_impl::ldpc_decoder_bb_impl(dvb_standard_t standard,
  */
 ldpc_decoder_bb_impl::~ldpc_decoder_bb_impl()
 {
-    free(d_aligned_buffer);
+    LDPC_ALIGNED_FREE(d_aligned_buffer);
     delete[] d_soft;
     delete d_ldpc;
 }

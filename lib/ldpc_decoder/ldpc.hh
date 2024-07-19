@@ -10,6 +10,9 @@
 #ifndef LDPC_HH
 #define LDPC_HH
 
+#define LDPC_ALIGNED_ALLOC(alignment, size) _aligned_malloc(size, alignment)
+#define LDPC_ALIGNED_FREE(x) _aligned_free(x)
+
 struct LDPCInterface {
     virtual LDPCInterface* clone() = 0;
     virtual int code_len() = 0;

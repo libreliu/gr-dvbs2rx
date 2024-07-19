@@ -10,7 +10,7 @@ options:
     gen_cmake: 'On'
     gen_linking: dynamic
     generate_options: qt_gui
-    hier_block_src_path: '.:'
+    hier_block_src_path: '../../../../../../../../../gr-dvbs2rx\examples\dvbs2_tx_rx.grc'
     id: dvbs2_tx_rx
     max_nouts: '0'
     output_language: python
